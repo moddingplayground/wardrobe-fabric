@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -33,7 +34,7 @@ public interface WardrobeCommand {
     SimpleCommandExceptionType EQUIP_FAIL_EXCEPTION = new SimpleCommandExceptionType(Text.translatable("command.%s.equip_fail".formatted(Wardrobe.MOD_ID)));
 
     static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<FabricClientCommandSource> root = dispatcher.register(
             literal(Wardrobe.MOD_ID)
                 .then(
                     literal("reload")
@@ -56,9 +57,10 @@ public interface WardrobeCommand {
                         .then(
                             argument(COSMETIC_SLOT_KEY, CosmeticSlotArgumentType.cosmeticSlot())
                                 .executes(WardrobeCommand::executeClearSlot)
-                    )
+                        )
                 )
         );
+        dispatcher.register(literal(Wardrobe.MOD_ID + ":cosmetics").redirect(root));
     }
 
     static int executeReload(CommandContext<FabricClientCommandSource> context) {
