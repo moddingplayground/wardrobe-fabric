@@ -1,0 +1,15 @@
+{
+  "mod.wardrobe.name": "Wardrobe",
+  "mod.wardrobe.contact.discord": "Discord",
+
+  "command.wardrobe.equip": "[Wardrobe] Equipped %s! %s",
+  "command.wardrobe.equip_fail": "Could not equip cosmetic!",
+  "command.wardrobe.clear": "[Wardrobe] Cleared all cosmetic slots",
+  "command.wardrobe.clear_slot": "Cleared cosmetic slot '%s'",
+  "command.wardrobe.reload": "[Wardrobe] Reloaded cosmetics",
+
+  "wardrobe.cosmetic.unknown": "Unknown cosmetic '%s'",
+  "wardrobe.cosmetic.slot.unknown": "Unknown cosmetic slot '%s'",
+
+  "wardrobe.cosmetic.wardrobe:sunhat": "Sunhat"
+}
