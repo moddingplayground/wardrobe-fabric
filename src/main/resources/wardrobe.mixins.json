@@ -8,6 +8,7 @@
   ],
   "client": [
     "client.ArmorFeatureRendererMixin",
+    "client.HeadFeatureRendererMixin",
     "client.LivingEntityRendererMixin",
     "client.MinecraftClientMixin",
     "client.ModelPartMixin",
