@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import net.moddingplayground.wardrobe.api.Wardrobe;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.CosmeticRenderer;
 import net.moddingplayground.wardrobe.api.cosmetic.Cosmetic;
+import net.moddingplayground.wardrobe.api.cosmetic.CosmeticInstance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,10 @@ public class CosmeticsRendererManager implements SimpleSynchronousResourceReload
 
     public CosmeticRenderer getRenderer(Cosmetic cosmetic) {
         return this.renderers.get(cosmetic);
+    }
+
+    public CosmeticRenderer getRenderer(CosmeticInstance cosmetic) {
+        return this.getRenderer(cosmetic.cosmetic());
     }
 
     @Override

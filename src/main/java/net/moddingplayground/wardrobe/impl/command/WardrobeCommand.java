@@ -1,31 +1,27 @@
-package net.moddingplayground.wardrobe.api.client.command;
+package net.moddingplayground.wardrobe.impl.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.command.argument.ColorArgumentType;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import net.moddingplayground.wardrobe.api.Wardrobe;
-import net.moddingplayground.wardrobe.api.client.util.WardrobeConfig;
-import net.moddingplayground.wardrobe.api.command.argument.CosmeticArgumentType;
-import net.moddingplayground.wardrobe.api.command.argument.CosmeticSlotArgumentType;
 import net.moddingplayground.wardrobe.api.cosmetic.Cosmetic;
 import net.moddingplayground.wardrobe.api.cosmetic.CosmeticInstance;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticSlot;
 import net.moddingplayground.wardrobe.api.cosmetic.data.PlayerCosmeticData;
+import net.moddingplayground.wardrobe.impl.command.argument.CosmeticArgumentType;
+import net.moddingplayground.wardrobe.impl.command.argument.CosmeticSlotArgumentType;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
+import static net.minecraft.server.command.CommandManager.*;
 
-@Environment(EnvType.CLIENT)
 public interface WardrobeCommand {
     String COSMETIC_KEY = "cosmetic";
     String COSMETIC_SLOT_KEY = "cosmetic_slot";
@@ -33,13 +29,9 @@ public interface WardrobeCommand {
 
     SimpleCommandExceptionType EQUIP_FAIL_EXCEPTION = new SimpleCommandExceptionType(Text.translatable("command.%s.equip_fail".formatted(Wardrobe.MOD_ID)));
 
-    static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        LiteralCommandNode<FabricClientCommandSource> root = dispatcher.register(
+    static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+        LiteralCommandNode<ServerCommandSource> root = dispatcher.register(
             literal(Wardrobe.MOD_ID)
-                .then(
-                    literal("reload")
-                        .executes(WardrobeCommand::executeReload)
-                )
                 .then(
                     literal("equip")
                         .then(
@@ -63,13 +55,7 @@ public interface WardrobeCommand {
         dispatcher.register(literal(Wardrobe.MOD_ID + ":cosmetics").redirect(root));
     }
 
-    static int executeReload(CommandContext<FabricClientCommandSource> context) {
-        WardrobeConfig.loadClientCosmeticData();
-        context.getSource().sendFeedback(Text.translatable("command.%s.reload".formatted(Wardrobe.MOD_ID)));
-        return 1;
-    }
-
-    static int executeEquipSlot(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    static int executeEquipSlot(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Cosmetic cosmetic = CosmeticArgumentType.getCosmetic(context, COSMETIC_KEY);
 
         int color = Util.make(() -> {
@@ -82,56 +68,50 @@ public interface WardrobeCommand {
             return 0xFFFFFF;
         });
 
-        FabricClientCommandSource source = context.getSource();
-        ClientPlayerEntity player = source.getPlayer();
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
         PlayerCosmeticData data = player.getCosmeticData();
 
-        if (data.equip(new CosmeticInstance(cosmetic, color))) {
-            WardrobeConfig.flushClientCosmeticData();
-        } else {
+        if (!data.equip(new CosmeticInstance(cosmetic, color), player)) {
             throw EQUIP_FAIL_EXCEPTION.create();
         }
 
-        source.sendFeedback(Text.translatable("command.%s.equip".formatted(Wardrobe.MOD_ID), cosmetic.getOrCreateDisplayText(), Text.literal("⬛").setStyle(Style.EMPTY.withColor(color))));
+        source.sendFeedback(Text.translatable("command.%s.equip".formatted(Wardrobe.MOD_ID), cosmetic.getOrCreateDisplayText(), Text.literal("⬛").setStyle(Style.EMPTY.withColor(color))), false);
         return 1;
     }
 
-    static int executeClear(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        FabricClientCommandSource source = context.getSource();
-        ClientPlayerEntity player = source.getPlayer();
+    static int executeClear(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
         PlayerCosmeticData data = player.getCosmeticData();
 
         boolean affected = false;
         for (CosmeticSlot slot : CosmeticSlot.values()) {
-            if (data.clear(slot)) {
+            if (data.clear(slot, player)) {
                 affected = true;
             }
         }
 
-        if (affected) {
-            WardrobeConfig.flushClientCosmeticData();
-        } else {
+        if (!affected) {
             throw EQUIP_FAIL_EXCEPTION.create();
         }
 
-        source.sendFeedback(Text.translatable("command.%s.clear".formatted(Wardrobe.MOD_ID)));
+        source.sendFeedback(Text.translatable("command.%s.clear".formatted(Wardrobe.MOD_ID)), false);
         return 1;
     }
 
-    static int executeClearSlot(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    static int executeClearSlot(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         CosmeticSlot slot = CosmeticSlotArgumentType.getCosmeticSlot(context, COSMETIC_SLOT_KEY);
 
-        FabricClientCommandSource source = context.getSource();
-        ClientPlayerEntity player = source.getPlayer();
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
         PlayerCosmeticData data = player.getCosmeticData();
 
-        if (data.clear(slot)) {
-            WardrobeConfig.flushClientCosmeticData();
-        } else {
+        if (!data.clear(slot)) {
             throw EQUIP_FAIL_EXCEPTION.create();
         }
 
-        source.sendFeedback(Text.translatable("command.%s.clear_slot".formatted(Wardrobe.MOD_ID), slot.name()));
+        source.sendFeedback(Text.translatable("command.%s.clear_slot".formatted(Wardrobe.MOD_ID), slot.name()), false);
         return 1;
     }
 }

@@ -11,5 +11,6 @@
   "wardrobe.cosmetic.unknown": "Unknown cosmetic '%s'",
   "wardrobe.cosmetic.slot.unknown": "Unknown cosmetic slot '%s'",
 
-  "wardrobe.cosmetic.wardrobe:sunhat": "Sunhat"
+  "wardrobe.cosmetic.wardrobe:sunhat": "Sunhat",
+  "wardrobe.cosmetic.wardrobe:crit": "Crits"
 }

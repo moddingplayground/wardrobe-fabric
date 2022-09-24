@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "package": "net.moddingplayground.wardrobe.mixin",
   "mixins": [
+    "ArgumentTypesMixin",
     "PlayerEntityMixin"
   ],
   "client": [
@@ -12,7 +13,8 @@
     "client.LivingEntityRendererMixin",
     "client.MinecraftClientMixin",
     "client.ModelPartMixin",
-    "client.PlayerEntityModelMixin"
+    "client.PlayerEntityModelMixin",
+    "client.flair.PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

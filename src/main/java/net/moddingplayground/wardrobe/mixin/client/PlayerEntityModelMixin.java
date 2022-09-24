@@ -28,7 +28,7 @@ public class PlayerEntityModelMixin<T extends LivingEntity> {
             PlayerCosmeticData data = player.getCosmeticData();
             for (CosmeticSlot slot : CosmeticSlot.values()) {
                 data.get(slot).ifPresent(cosmetic -> {
-                    CosmeticRenderer renderer = CosmeticsRendererManager.INSTANCE.getRenderer(cosmetic.cosmetic());
+                    CosmeticRenderer renderer = CosmeticsRendererManager.INSTANCE.getRenderer(cosmetic);
                     renderer.setAngles(player, limbAngle, limbDistance, animationProgress, headYaw, headPitch, (PlayerEntityModel<PlayerEntity>) (Object) this);
                 });
             }

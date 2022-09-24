@@ -23,16 +23,22 @@
   },
   "custom": {
     "modmenu": { "links": { "mod.wardrobe.contact.discord": "https://discord.moddingplayground.net" } },
+
     "loom:injected_interfaces": {
       "net/minecraft/entity/player/PlayerEntity": [ "net/moddingplayground/wardrobe/api/cosmetic/data/CosmeticPlayerEntity" ],
       "net/minecraft/client/model/ModelPart": [ "net/moddingplayground/wardrobe/api/client/model/WardrobeModelPart" ]
-    }
+    },
+
+    "cardinal-components": [
+      "wardrobe:player"
+    ]
   },
 
   "environment": "*",
   "entrypoints": {
     "main": [ "net.moddingplayground.wardrobe.impl.WardrobeImpl" ],
-    "client": [ "net.moddingplayground.wardrobe.impl.client.WardrobeClientImpl" ]
+    "client": [ "net.moddingplayground.wardrobe.impl.client.WardrobeClientImpl" ],
+    "cardinal-components-entity": [ "net.moddingplayground.wardrobe.impl.component.WardrobeComponentsImpl" ]
   },
   "mixins": [ "wardrobe.mixins.json" ],
 
@@ -40,7 +46,8 @@
     "java": ">=17",
     "minecraft": ">=1.19",
     "fabricloader": ">=0.14",
-    "fabric-api": ">=0.59",
-    "frame": "*"
+    "fabric": ">=0.57",
+    "frame": "*",
+    "cardinal-components-entity": ">=5.0"
   }
 }

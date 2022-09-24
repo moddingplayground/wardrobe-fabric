@@ -35,7 +35,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
             CosmeticRendererContext context = new CosmeticRendererContext(player, yaw, tickDelta, matrices, vertices, light, (PlayerEntityRenderer) (Object) this);
             for (CosmeticSlot slot : CosmeticSlot.values()) {
                 data.get(slot).ifPresent(cosmetic -> {
-                    CosmeticRenderer renderer = CosmeticsRendererManager.INSTANCE.getRenderer(cosmetic.cosmetic());
+                    CosmeticRenderer renderer = CosmeticsRendererManager.INSTANCE.getRenderer(cosmetic);
                     renderer.render(context, cosmetic);
                 });
             }

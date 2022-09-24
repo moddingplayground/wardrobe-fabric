@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.CosmeticRenderer;
+import net.moddingplayground.wardrobe.api.client.render.cosmetic.CritCosmeticRenderer;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.SunhatCosmeticRenderer;
 import net.moddingplayground.wardrobe.api.cosmetic.Cosmetic;
 import net.moddingplayground.wardrobe.api.cosmetic.Cosmetics;
@@ -50,5 +51,6 @@ public class CosmeticRenderers {
 
     static {
         CosmeticRenderers.register(Cosmetics.SUNHAT, SunhatCosmeticRenderer::new);
+        CosmeticRenderers.register(Cosmetics.CRIT, CritCosmeticRenderer::new);
     }
 }

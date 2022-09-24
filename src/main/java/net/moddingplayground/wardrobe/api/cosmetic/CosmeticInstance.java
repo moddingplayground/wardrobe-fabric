@@ -1,10 +1,11 @@
 package net.moddingplayground.wardrobe.api.cosmetic;
 
-import com.google.gson.JsonObject;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticSlot;
 import net.moddingplayground.wardrobe.api.registry.WardrobeRegistry;
-import org.jetbrains.annotations.Nullable;
 
 public record CosmeticInstance(Cosmetic cosmetic, int color) {
     public static final String ID_KEY = "id";
@@ -14,18 +15,27 @@ public record CosmeticInstance(Cosmetic cosmetic, int color) {
         return this.cosmetic.getCosmeticSlot();
     }
 
-    public JsonObject toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty(ID_KEY, WardrobeRegistry.COSMETIC.getId(this.cosmetic).toString());
-        json.addProperty(COLOR_KEY, this.color);
-        return json;
+    public NbtCompound toNbt() {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putString(ID_KEY, WardrobeRegistry.COSMETIC.getId(this.cosmetic).toString());
+        nbt.putInt(COLOR_KEY, this.color);
+        return nbt;
     }
 
-    @Nullable
-    public static CosmeticInstance fromJson(JsonObject json) {
-        String id = json.getAsJsonPrimitive(ID_KEY).getAsString();
-        int color = json.getAsJsonPrimitive(COLOR_KEY).getAsInt();
+    public static CosmeticInstance fromNbt(NbtCompound nbt) {
+        String id = nbt.getString(ID_KEY);
+        int color = nbt.getInt(COLOR_KEY);
         Cosmetic cosmetic = WardrobeRegistry.COSMETIC.get(Identifier.tryParse(id));
-        return cosmetic == null ? null : new CosmeticInstance(cosmetic, color);
+        return new CosmeticInstance(cosmetic, color);
+    }
+
+    public PacketByteBuf toPacket() {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeNbt(this.toNbt());
+        return buf;
+    }
+
+    public static CosmeticInstance fromPacket(PacketByteBuf buf) {
+        return fromNbt(buf.readNbt());
     }
 }
