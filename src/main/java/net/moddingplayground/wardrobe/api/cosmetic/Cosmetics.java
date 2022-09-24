@@ -8,7 +8,7 @@ import net.moddingplayground.wardrobe.api.registry.WardrobeRegistry;
 
 public interface Cosmetics {
     Cosmetic SUNHAT = register("sunhat", new DefaultCosmetic(CosmeticSlot.HEAD));
-    Cosmetic CRIT = register("crit", new DefaultCosmetic(CosmeticSlot.FLAIR));
+    Cosmetic DUST = register("dust", new DefaultCosmetic(CosmeticSlot.FLAIR));
 
     private static <T extends Cosmetic> T register(String id, T cosmetic) {
         return Registry.register(WardrobeRegistry.COSMETIC, new Identifier(Wardrobe.MOD_ID, id), cosmetic);

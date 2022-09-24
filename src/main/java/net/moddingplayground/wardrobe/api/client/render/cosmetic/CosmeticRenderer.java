@@ -16,7 +16,7 @@ public interface CosmeticRenderer {
     default void setAngles(AbstractClientPlayerEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch, PlayerEntityModel<PlayerEntity> contextModel) {
     }
 
-    default void onLevelUp(CosmeticInstance cosmetic, PlayerEntity player) {
+    default void onLevelUp(PlayerEntity player, int level, CosmeticInstance cosmetic) {
     }
 
     default Identifier getTexture() {

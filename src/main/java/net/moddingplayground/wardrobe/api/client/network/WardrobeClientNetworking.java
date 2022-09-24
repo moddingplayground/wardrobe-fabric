@@ -17,18 +17,19 @@ import java.util.UUID;
 @Environment(EnvType.CLIENT)
 public interface WardrobeClientNetworking extends WardrobeNetworking {
     static void registerReceivers() {
-        ClientPlayNetworking.registerGlobalReceiver(LEVELUP_PACKET_ID, WardrobeClientNetworking::onLevelup);
+        ClientPlayNetworking.registerGlobalReceiver(LEVEL_UP_PACKET_ID, WardrobeClientNetworking::onLevelUp);
     }
 
     /**
-     * Received by the client player on levelup.
+     * Received by the client player on level-up.
      */
-    static void onLevelup(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+    static void onLevelUp(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         CosmeticInstance cosmetic = CosmeticInstance.fromPacket(buf);
         UUID uuid = buf.readUuid();
+        int level = buf.readInt();
         client.execute(() -> {
             PlayerEntity player = client.world.getPlayerByUuid(uuid);
-            CosmeticsRendererManager.INSTANCE.getRenderer(cosmetic).onLevelUp(cosmetic, player);
+            CosmeticsRendererManager.INSTANCE.getRenderer(cosmetic).onLevelUp(player, level, cosmetic);
         });
     }
 }

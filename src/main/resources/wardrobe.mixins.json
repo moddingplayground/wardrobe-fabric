@@ -13,6 +13,7 @@
     "client.LivingEntityRendererMixin",
     "client.MinecraftClientMixin",
     "client.ModelPartMixin",
+    "client.ParticleManagerMixin",
     "client.PlayerEntityModelMixin",
     "client.flair.PlayerEntityMixin"
   ],

@@ -10,11 +10,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
+import net.moddingplayground.wardrobe.api.cosmetic.CosmeticInstance;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticPlayerEntity;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticSlot;
 import net.moddingplayground.wardrobe.api.cosmetic.data.PlayerCosmeticData;
 import net.moddingplayground.wardrobe.api.network.WardrobeNetworking;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,15 +31,22 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Cosmetic
     @Inject(method = "addExperienceLevels", at = @At("TAIL"))
     private void onAddExperienceLevels(int levels, CallbackInfo ci) {
         PlayerEntity that = (PlayerEntity) (Object) this;
-        if (!this.world.isClient) {
+        if (that instanceof ServerPlayerEntity serverPlayer) {
             PlayerCosmeticData data = this.getCosmeticData();
             data.get(CosmeticSlot.FLAIR).ifPresent(cosmetic -> {
+                sendLevelUp(serverPlayer, that, cosmetic);
                 for (ServerPlayerEntity player : PlayerLookup.tracking(that)) {
-                    PacketByteBuf buf = cosmetic.toPacket();
-                    buf.writeUuid(that.getUuid());
-                    ServerPlayNetworking.send(player, WardrobeNetworking.LEVELUP_PACKET_ID, buf);
+                    sendLevelUp(player, that, cosmetic);
                 }
             });
         }
+    }
+
+    @Unique
+    private void sendLevelUp(ServerPlayerEntity receiver, PlayerEntity player, CosmeticInstance cosmetic) {
+        PacketByteBuf buf = cosmetic.toPacket();
+        buf.writeUuid(player.getUuid());
+        buf.writeInt(player.experienceLevel);
+        ServerPlayNetworking.send(receiver, WardrobeNetworking.LEVEL_UP_PACKET_ID, buf);
     }
 }

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticSlot;
 import net.moddingplayground.wardrobe.api.registry.WardrobeRegistry;
 
@@ -13,6 +14,13 @@ public record CosmeticInstance(Cosmetic cosmetic, int color) {
 
     public CosmeticSlot getCosmeticSlot() {
         return this.cosmetic.getCosmeticSlot();
+    }
+
+    public Vec3f getRGB() {
+        float r = ((color >> 16) & 0xFF) / 255f;
+        float g = ((color >>  8) & 0xFF) / 255f;
+        float b =  (color        & 0xFF) / 255f;
+        return new Vec3f(r, g, b);
     }
 
     public NbtCompound toNbt() {
