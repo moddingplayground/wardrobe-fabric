@@ -11,21 +11,21 @@ import net.minecraft.util.math.Vec3d;
 import static java.lang.Math.*;
 
 @Environment(EnvType.CLIENT)
-public class SurroundingEmitterParticle extends NoRenderParticle implements CustomEmitterParticle {
+public class RisingEmitterParticle extends NoRenderParticle implements CustomEmitterParticle {
     private final Entity entity;
     private int emitterAge;
     private final int maxEmitterAge;
     private final ParticleEffect parameters;
 
-    public SurroundingEmitterParticle(ClientWorld world, Entity entity, ParticleEffect parameters) {
+    public RisingEmitterParticle(ClientWorld world, Entity entity, ParticleEffect parameters) {
         this(world, entity, parameters, 3);
     }
 
-    public SurroundingEmitterParticle(ClientWorld world, Entity entity, ParticleEffect parameters, int maxEmitterAge) {
+    public RisingEmitterParticle(ClientWorld world, Entity entity, ParticleEffect parameters, int maxEmitterAge) {
         this(world, entity, parameters, maxEmitterAge, entity.getVelocity());
     }
 
-    public SurroundingEmitterParticle(ClientWorld world, Entity entity, ParticleEffect parameters, int maxEmitterAge, Vec3d velocity) {
+    public RisingEmitterParticle(ClientWorld world, Entity entity, ParticleEffect parameters, int maxEmitterAge, Vec3d velocity) {
         super(world, entity.getX(), entity.getBodyY(0.5), entity.getZ(), velocity.x, velocity.y, velocity.z);
         this.entity = entity;
         this.maxEmitterAge = maxEmitterAge;
@@ -52,19 +52,21 @@ public class SurroundingEmitterParticle extends NoRenderParticle implements Cust
 
         this.emitterAge++;
         if (this.emitterAge >= this.maxEmitterAge) {
-            for (int i = 0; i < 128; ++i) {
-                double vx = this.random.nextFloat() * 2.0f - 1.0f;
-                double vy = this.random.nextFloat() * 2.0f - 1.0f;
-                double vz = this.random.nextFloat() * 2.0f - 1.0f;
+            if (this.maxEmitterAge > 20) {
+                for (int i = 0; i < 128; ++i) {
+                    double vx = this.random.nextFloat() * 2.0f - 1.0f;
+                    double vy = this.random.nextFloat() * 2.0f - 1.0f;
+                    double vz = this.random.nextFloat() * 2.0f - 1.0f;
 
-                if ((vx * vx) + (vy * vy) + (vz * vz) > 1.0) {
-                    continue;
+                    if ((vx * vx) + (vy * vy) + (vz * vz) > 1.0) {
+                        continue;
+                    }
+
+                    double x = this.entity.offsetX(vx * 3.5D);
+                    double y = this.entity.getBodyY(this.random.nextFloat() * 1.5D);
+                    double z = this.entity.offsetZ(vz * 3.5D);
+                    this.world.addParticle(this.parameters, false, x, y, z, vx, vy + 0.2, vz);
                 }
-
-                double x = this.entity.offsetX(vx * 3.5D);
-                double y = this.entity.getBodyY(this.random.nextFloat() * 1.5D);
-                double z = this.entity.offsetZ(vz * 3.5D);
-                this.world.addParticle(this.parameters, false, x, y, z, vx, vy + 0.2, vz);
             }
 
             this.markDead();

@@ -7,7 +7,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.moddingplayground.wardrobe.api.client.particle.CustomEmitterParticle;
 import net.moddingplayground.wardrobe.api.client.particle.WardrobeParticleManagerExtensions;
-import org.apache.commons.lang3.function.TriFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
-import java.util.function.BiFunction;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ParticleManager.class)
@@ -57,13 +55,7 @@ public class ParticleManagerMixin implements WardrobeParticleManagerExtensions {
 
     @Unique
     @Override
-    public void addCustomEmitter(Entity entity, BiFunction<ClientWorld, Entity, CustomEmitterParticle> factory) {
-        this.newCustomEmitterParticles.add(factory.apply(this.world, entity));
-    }
-
-    @Unique
-    @Override
-    public void addCustomEmitter(Entity entity, TriFunction<ClientWorld, Entity, Integer, CustomEmitterParticle> factory, int maxAge) {
-        this.addCustomEmitter(entity, (world, entityx) -> factory.apply(world, entityx, maxAge));
+    public void addCustomEmitter(Entity entity, CustomEmitterParticle.Factory factory) {
+        this.newCustomEmitterParticles.add(factory.create(this.world, entity));
     }
 }

@@ -5,7 +5,8 @@
   "package": "net.moddingplayground.wardrobe.mixin",
   "mixins": [
     "ArgumentTypesMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "flair.ServerPlayerEntityMixin"
   ],
   "client": [
     "client.ArmorFeatureRendererMixin",
@@ -14,8 +15,7 @@
     "client.MinecraftClientMixin",
     "client.ModelPartMixin",
     "client.ParticleManagerMixin",
-    "client.PlayerEntityModelMixin",
-    "client.flair.PlayerEntityMixin"
+    "client.PlayerEntityModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class PlayerCosmeticData {
     private static final String
@@ -54,6 +55,10 @@ public class PlayerCosmeticData {
 
     public Optional<CosmeticInstance> get(CosmeticSlot slot) {
         return Optional.ofNullable(this.cosmetics.get(slot));
+    }
+
+    public void run(CosmeticSlot slot, Consumer<CosmeticInstance> action) {
+        this.get(slot).ifPresent(action);
     }
 
     public NbtCompound toNbt() {
