@@ -11,20 +11,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Optional;
-import java.util.function.Consumer;
 
-public class PlayerCosmeticData {
-    private static final String
-        SLOT_KEY = "Slot",
-        COSMETICS_KEY = "Cosmetics",
-        COSMETIC_KEY = "Cosmetic";
-
+public class PlayerCosmeticData implements CosmeticData {
     private final EnumMap<CosmeticSlot, CosmeticInstance> cosmetics;
 
     public PlayerCosmeticData() {
         this.cosmetics = new EnumMap<>(CosmeticSlot.class);
     }
 
+    @Override
     public boolean equip(CosmeticInstance cosmetic, @Nullable PlayerEntity player) {
         boolean changed = !cosmetic.equals(this.cosmetics.put(cosmetic.getCosmeticSlot(), cosmetic));
         if (changed && player != null) {
@@ -33,10 +28,7 @@ public class PlayerCosmeticData {
         return changed;
     }
 
-    public boolean equip(CosmeticInstance cosmetic) {
-        return this.equip(cosmetic, null);
-    }
-
+    @Override
     public boolean clear(CosmeticSlot slot, @Nullable PlayerEntity player) {
         if (this.cosmetics.containsKey(slot)) {
             this.cosmetics.remove(slot);
@@ -49,18 +41,12 @@ public class PlayerCosmeticData {
         return false;
     }
 
-    public boolean clear(CosmeticSlot slot) {
-        return this.clear(slot, null);
-    }
-
+    @Override
     public Optional<CosmeticInstance> get(CosmeticSlot slot) {
         return Optional.ofNullable(this.cosmetics.get(slot));
     }
 
-    public void run(CosmeticSlot slot, Consumer<CosmeticInstance> action) {
-        this.get(slot).ifPresent(action);
-    }
-
+    @Override
     public NbtCompound toNbt() {
         NbtCompound nbt = new NbtCompound();
 
@@ -76,6 +62,7 @@ public class PlayerCosmeticData {
         return nbt;
     }
 
+    @Override
     public void fromNbt(NbtCompound nbt) {
         this.cosmetics.clear();
 
@@ -95,6 +82,7 @@ public class PlayerCosmeticData {
         }
     }
 
+    @Override
     public boolean affectsSlot(EquipmentSlot slot) {
         return this.cosmetics.keySet().stream().anyMatch(slotx -> slotx.affectsSlot(slot));
     }

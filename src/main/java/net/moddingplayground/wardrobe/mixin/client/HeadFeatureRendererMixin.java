@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.feature.HeadFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.moddingplayground.wardrobe.api.cosmetic.data.PlayerCosmeticData;
+import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,7 +28,7 @@ public class HeadFeatureRendererMixin<T extends LivingEntity> {
     )
     private void onRender(MatrixStack matrices, VertexConsumerProvider vertices, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch, CallbackInfo ci) {
         if (entity instanceof AbstractClientPlayerEntity player) {
-            PlayerCosmeticData data = player.getCosmeticData();
+            CosmeticData data = player.getCosmeticData();
             if (data.affectsSlot(EquipmentSlot.HEAD)) {
                 ci.cancel();
             }

@@ -15,8 +15,8 @@ import net.minecraft.util.Util;
 import net.moddingplayground.wardrobe.api.Wardrobe;
 import net.moddingplayground.wardrobe.api.cosmetic.Cosmetic;
 import net.moddingplayground.wardrobe.api.cosmetic.CosmeticInstance;
+import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticData;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticSlot;
-import net.moddingplayground.wardrobe.api.cosmetic.data.PlayerCosmeticData;
 import net.moddingplayground.wardrobe.impl.command.argument.CosmeticArgumentType;
 import net.moddingplayground.wardrobe.impl.command.argument.CosmeticSlotArgumentType;
 
@@ -70,7 +70,7 @@ public interface WardrobeCommand {
 
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
-        PlayerCosmeticData data = player.getCosmeticData();
+        CosmeticData data = player.getCosmeticData();
 
         if (!data.equip(new CosmeticInstance(cosmetic, color), player)) {
             throw EQUIP_FAIL_EXCEPTION.create();
@@ -83,7 +83,7 @@ public interface WardrobeCommand {
     static int executeClear(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
-        PlayerCosmeticData data = player.getCosmeticData();
+        CosmeticData data = player.getCosmeticData();
 
         boolean affected = false;
         for (CosmeticSlot slot : CosmeticSlot.values()) {
@@ -105,7 +105,7 @@ public interface WardrobeCommand {
 
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
-        PlayerCosmeticData data = player.getCosmeticData();
+        CosmeticData data = player.getCosmeticData();
 
         if (!data.clear(slot)) {
             throw EQUIP_FAIL_EXCEPTION.create();

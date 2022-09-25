@@ -9,7 +9,7 @@ import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.moddingplayground.wardrobe.api.cosmetic.data.PlayerCosmeticData;
+import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,7 +29,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, A extends BipedEn
     )
     private void onRenderArmor(MatrixStack matrices, VertexConsumerProvider vertices, T entity, EquipmentSlot slot, int light, A model, CallbackInfo ci) {
         if (entity instanceof AbstractClientPlayerEntity player) {
-            PlayerCosmeticData data = player.getCosmeticData();
+            CosmeticData data = player.getCosmeticData();
             if (data.affectsSlot(slot)) {
                 ci.cancel();
             }

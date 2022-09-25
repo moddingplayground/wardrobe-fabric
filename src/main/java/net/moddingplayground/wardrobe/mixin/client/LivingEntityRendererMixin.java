@@ -11,8 +11,8 @@ import net.minecraft.entity.LivingEntity;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.CosmeticRenderer;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.CosmeticRendererContext;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.manager.CosmeticsRendererManager;
+import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticData;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticSlot;
-import net.moddingplayground.wardrobe.api.cosmetic.data.PlayerCosmeticData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +31,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
     )
     private void onRender(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertices, int light, CallbackInfo ci) {
         if (entity instanceof AbstractClientPlayerEntity player) {
-            PlayerCosmeticData data = player.getCosmeticData();
+            CosmeticData data = player.getCosmeticData();
             CosmeticRendererContext context = new CosmeticRendererContext(player, yaw, tickDelta, matrices, vertices, light, (PlayerEntityRenderer) (Object) this);
             for (CosmeticSlot slot : CosmeticSlot.values()) {
                 data.get(slot).ifPresent(cosmetic -> {

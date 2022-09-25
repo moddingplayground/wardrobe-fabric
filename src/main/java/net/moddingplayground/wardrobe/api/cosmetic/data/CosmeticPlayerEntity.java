@@ -1,7 +1,7 @@
 package net.moddingplayground.wardrobe.api.cosmetic.data;
 
 public interface CosmeticPlayerEntity {
-    default PlayerCosmeticData getCosmeticData() {
+    default CosmeticData getCosmeticData() {
         throw new AssertionError();
     }
 }
