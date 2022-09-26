@@ -10,12 +10,15 @@
   ],
   "client": [
     "client.ArmorFeatureRendererMixin",
+    "client.ClientPlayerEntityMixin",
+    "client.ClientPlayNetworkHandlerMixin",
     "client.HeadFeatureRendererMixin",
     "client.LivingEntityRendererMixin",
     "client.MinecraftClientMixin",
     "client.ModelPartMixin",
     "client.ParticleManagerMixin",
-    "client.PlayerEntityModelMixin"
+    "client.PlayerEntityModelMixin",
+    "client.ServerInfoMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -27,7 +27,8 @@
     "loom:injected_interfaces": {
       "net/minecraft/entity/player/PlayerEntity": [ "net/moddingplayground/wardrobe/api/cosmetic/data/CosmeticPlayerEntity" ],
       "net/minecraft/client/model/ModelPart": [ "net/moddingplayground/wardrobe/api/client/model/WardrobeModelPart" ],
-      "net/minecraft/client/particle/ParticleManager": [ "net/moddingplayground/wardrobe/api/client/particle/WardrobeParticleManagerExtensions" ]
+      "net/minecraft/client/particle/ParticleManager": [ "net/moddingplayground/wardrobe/api/client/particle/WardrobeParticleManagerExtensions" ],
+      "net/minecraft/client/network/ServerInfo": [ "net/moddingplayground/wardrobe/api/client/network/WardrobeServerInfo" ]
     },
 
     "cardinal-components": [
