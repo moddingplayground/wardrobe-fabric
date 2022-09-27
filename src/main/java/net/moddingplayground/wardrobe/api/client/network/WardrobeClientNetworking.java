@@ -4,6 +4,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -33,6 +34,19 @@ public interface WardrobeClientNetworking extends WardrobeNetworking {
         ClientLoginNetworking.registerGlobalReceiver(SERVER_INIT_PACKET_ID, WardrobeClientNetworking::onServerInitialize);
         ClientPlayNetworking.registerGlobalReceiver(LEVEL_UP_PACKET_ID, WardrobeClientNetworking::onLevelUp);
         ClientPlayNetworking.registerGlobalReceiver(CRIT_PACKET_ID, WardrobeClientNetworking::onCrit);
+    }
+
+    static boolean isUnsupported(MinecraftClient client) {
+        if (client.isIntegratedServerRunning()) {
+            return false;
+        }
+
+        ServerInfo server = client.getCurrentServerEntry();
+        return server == null || !server.isSupported();
+    }
+
+    static boolean isUnsupported(FabricClientCommandSource source) {
+        return isUnsupported(source.getClient());
     }
 
     /**

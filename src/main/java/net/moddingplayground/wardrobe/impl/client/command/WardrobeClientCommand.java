@@ -6,9 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.command.argument.ColorArgumentType;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -16,6 +14,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import net.moddingplayground.wardrobe.api.Wardrobe;
 import net.moddingplayground.wardrobe.api.client.cosmetic.LocalServerCosmeticsManager;
+import net.moddingplayground.wardrobe.api.client.network.WardrobeClientNetworking;
 import net.moddingplayground.wardrobe.api.cosmetic.Cosmetic;
 import net.moddingplayground.wardrobe.api.cosmetic.CosmeticInstance;
 import net.moddingplayground.wardrobe.api.cosmetic.data.CosmeticData;
@@ -29,9 +28,9 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 @Environment(EnvType.CLIENT)
 public interface WardrobeClientCommand extends WardrobeCommand {
     static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal(Wardrobe.MOD_ID + "-client:cosmetics").requires(WardrobeClientCommand::isUnsupported).redirect(dispatcher.register(
+        dispatcher.register(literal(Wardrobe.MOD_ID + "-client:cosmetics").requires(WardrobeClientNetworking::isUnsupported).redirect(dispatcher.register(
             literal(Wardrobe.MOD_ID + "-client")
-                .requires(WardrobeClientCommand::isUnsupported)
+                .requires(WardrobeClientNetworking::isUnsupported)
                 .then(
                     literal("equip")
                         .then(
@@ -52,16 +51,6 @@ public interface WardrobeClientCommand extends WardrobeCommand {
                         )
                 )
         )));
-    }
-
-    static boolean isUnsupported(FabricClientCommandSource source) {
-        MinecraftClient client = source.getClient();
-        if (client.isIntegratedServerRunning()) {
-            return false;
-        }
-
-        ServerInfo server = client.getCurrentServerEntry();
-        return server == null || !server.isSupported();
     }
 
     static int executeEquipSlot(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {

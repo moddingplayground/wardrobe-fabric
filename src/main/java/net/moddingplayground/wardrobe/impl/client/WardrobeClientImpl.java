@@ -13,6 +13,7 @@ import net.moddingplayground.wardrobe.api.client.model.WardrobeEntityModelLayers
 import net.moddingplayground.wardrobe.api.client.network.WardrobeClientNetworking;
 import net.moddingplayground.wardrobe.api.client.render.cosmetic.manager.CosmeticsRendererManager;
 import net.moddingplayground.wardrobe.impl.client.command.WardrobeClientCommand;
+import net.moddingplayground.wardrobe.impl.client.command.WardrobeGuiCommand;
 
 @Environment(EnvType.CLIENT)
 public final class WardrobeClientImpl implements Wardrobe, ClientModInitializer {
@@ -35,6 +36,7 @@ public final class WardrobeClientImpl implements Wardrobe, ClientModInitializer 
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             WardrobeClientCommand.register(dispatcher);
+            WardrobeGuiCommand.register(dispatcher);
         });
 
         this.initializer.finish();
