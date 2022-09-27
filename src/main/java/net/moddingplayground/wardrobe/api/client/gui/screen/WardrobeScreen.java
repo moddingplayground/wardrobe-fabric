@@ -41,6 +41,11 @@ public class WardrobeScreen extends Screen {
     }
 
     @Override
+    public boolean shouldPause() {
+        return false;
+    }
+
+    @Override
     protected void init() {
         this.x = (this.width / 2) - (BOX_WIDTH / 2);
         this.y = (this.height / 2) - (BOX_HEIGHT / 2);

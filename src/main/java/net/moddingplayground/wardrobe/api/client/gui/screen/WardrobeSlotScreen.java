@@ -17,6 +17,11 @@ public class WardrobeSlotScreen extends Screen {
         this.slot = slot;
     }
 
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
+
     public CosmeticSlot getSlot() {
         return this.slot;
     }
