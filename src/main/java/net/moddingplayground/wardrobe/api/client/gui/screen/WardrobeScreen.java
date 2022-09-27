@@ -77,6 +77,14 @@ public class WardrobeScreen extends Screen {
         RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
         this.drawTexture(matrices, this.x, this.y, 0, 0, BOX_WIDTH, BOX_HEIGHT);
 
+        /* Title */
+
+        this.textRenderer.draw(matrices, this.title, this.titleX, this.titleY, 0x003F3F3F);
+
+        /* Render Drawables, Etc. */
+
+        super.render(matrices, mouseX, mouseY, delta);
+
         /* Status */
 
         if (WardrobeClientNetworking.isUnsupported(this.client)) {
@@ -87,14 +95,6 @@ public class WardrobeScreen extends Screen {
                 this.renderTooltip(matrices, UNSUPPORTED_TOOLTIP_TEXT, mouseX, mouseY);
             }
         }
-
-        /* Title */
-
-        this.textRenderer.draw(matrices, this.title, this.titleX, this.titleY, 0x003F3F3F);
-
-        /* Render Drawables, Etc. */
-
-        super.render(matrices, mouseX, mouseY, delta);
     }
 
     public boolean isMouseWithinBounds(int mouseX, int mouseY, int x, int y, int width, int height) {
