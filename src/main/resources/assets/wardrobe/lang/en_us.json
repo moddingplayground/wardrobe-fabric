@@ -12,5 +12,13 @@
   "wardrobe.cosmetic.slot.unknown": "Unknown cosmetic slot '%s'",
 
   "wardrobe.cosmetic.wardrobe:sunhat": "Sunhat",
-  "wardrobe.cosmetic.wardrobe:dust": "Dust"
+  "wardrobe.cosmetic.wardrobe:dust": "Dust",
+
+  "wardrobe.cosmetic_slot.head": "Head",
+  "wardrobe.cosmetic_slot.robe": "Robe",
+  "wardrobe.cosmetic_slot.feet": "Feet",
+  "wardrobe.cosmetic_slot.flair": "Flair",
+
+  "ui.wardrobe.cosmetics.unsupported_server.line0": "This server does not support Wardrobe!",
+  "ui.wardrobe.cosmetics.unsupported_server.line1": "Changes will be saved locally for this server."
 }
